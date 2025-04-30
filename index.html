@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>JGA 2025</title>
+  <style>
+    body {
+      font-family: Comic Sans MS, cursive;
+      background: linear-gradient(to right, #ffccff, #ccffff);
+      text-align: center;
+      padding: 2em;
+    }
+    .quiz-box {
+      background: white;
+      border-radius: 20px;
+      padding: 2em;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      max-width: 600px;
+      margin: auto;
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 1em;
+    }
+    .answers button {
+      display: block;
+      margin: 0.5em auto;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      background-color: #ff99cc;
+      color: white;
+      cursor: pointer;
+    }
+    .answers button:hover {
+      background-color: #ff66aa;
+    }
+    #result {
+      margin-top: 2em;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h1>🎉 JGA 2025 🎉</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Was ist mein Lieblingskünstler?",
+        options: ["999999999", "Alle Farben", "Skrillex", "David Guetta"],
+        correct: 0
+      },
+      {
+        question: "Auf welchem Festival war ich schon 5 mal?",
+        options: ["Fusion", "Melt", "Rock am Ring", "Wacken"],
+        correct: 1
+      },
+      {
+        question: "Wie groß ist mein primäres Geschlechtsorgan?",
+        options: ["10 cm", "15 cm", "19 cm", "22 cm"],
+        correct: 3
+      }
+    ];
+
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+
+    function loadQuestion() {
+      if (currentQuestion < quizData.length) {
+        const q = quizData[currentQuestion];
+        const quizDiv = document.getElementById('quiz');
+        quizDiv.innerHTML = `
+          <div class="question">${q.question}</div>
+          <div class="answers">
+            ${q.options.map((opt, i) => `<button onclick="checkAnswer(${i})">${opt}</button>`).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function checkAnswer(selected) {
+      const q = quizData[currentQuestion];
+      if (selected === q.correct) {
+        correctAnswers++;
+        currentQuestion++;
+        if (currentQuestion === quizData.length) {
+          showSuccess();
+        } else {
+          loadQuestion();
+        }
+      } else {
+        showFailure();
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('quiz').innerHTML = "<h2>🎉 Du hast alles richtig! 🎉</h2>";
+      document.getElementById('result').innerHTML = `
+        <p>Gut gemacht, du hast dir eine Umarmung verdient ❤️</p>
+        <img src="success.jpg" alt="Erfolg">
+      `;
+    }
+
+    function showFailure() {
+      document.getElementById('quiz').innerHTML = "<h2>Leider falsch! 😢</h2><p>Bitte versuch es nochmal.</p>";
+      document.getElementById('result').innerHTML = `
+        <p>Das war wohl leider nicht...</p>
+        <img src="fail.jpg" alt="Fehler">
+        <br><br>
+        <button onclick="restartQuiz()">Neustarten</button>
+      `;
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      document.getElementById('result').innerHTML = "";
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
